@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>호그스미드 젤리 뽑기</title>
+  <style>
+    body {
+      font-family: "맑은 고딕", sans-serif;
+      background: #f4f1ea;
+      padding: 20px;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 { text-align: center; }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    button { cursor: pointer; }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #eee;
+      border-radius: 8px;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h1>🍬 호그스미드 젤리 뽑기</h1>
+
+  <p>
+    호그스미드에 도착한 당신은<br>
+    카멜 교수와 마주친다.
+  </p>
+
+  <input type="text" id="name" placeholder="이름을 입력하세요">
+
+  <input type="number" id="luck" placeholder="행운 수치 (1~5)" min="1" max="5">
+
+  <button onclick="draw()">젤리 먹기</button>
+
+  <div class="result" id="result">결과가 여기에 표시됩니다.</div>
+</div>
+
+<script>
+const bad = [
+  {name:"코딱지", effect:"지능 -1"},
+  {name:"지렁이", effect:"행운 -1"},
+  {name:"귀지", effect:"근력 -1"}
+];
+
+const normal = [
+  {name:"바나나", effect:"근력 +1"},
+  {name:"청사과", effect:"행운 +1"},
+  {name:"마시멜로우", effect:"지능 +1"},
+  {name:"블루베리", effect:"지능 +1"},
+  {name:"레몬사탕", effect:"행운 +1"},
+  {name:"시나몬", effect:"근력 +1"},
+  {name:"수박", effect:"민첩 +1"},
+  {name:"체리", effect:"민첩 +1"}
+];
+
+const good = [
+  {name:"솜사탕", effect:"체력 +5"},
+  {name:"설탕 묻힌 과일", effect:"체력 +5"}
+];
+
+const rates = {
+  1: [40, 40, 20, 0],
+  2: [30, 30, 35, 5],
+  3: [20, 20, 45, 15],
+  4: [10, 10, 55, 25],
+  5: [0, 5, 60, 35]
+};
+
+function draw() {
+  const name = document.getElementById("name").value || "이름 없는 마법사";
+  const luck = parseInt(document.getElementById("luck").value);
+
+  if (luck < 1 || luck > 5 || isNaN(luck)) {
+    document.getElementById("result").innerText =
+      "⚠️ 행운 수치는 1에서 5 사이로 입력해주세요.";
+    return;
+  }
+
+  const roll = Math.floor(Math.random() * 100) + 1;
+  const [empty, badR, normalR, goodR] = rates[luck];
+  let text = `${name}은(는) 젤리빈을 입에 넣었다...\n\n`;
+
+  if (roll <= empty) {
+    text += "❌ 꽝!\n아무런 효과도 일어나지 않았다.";
+  } 
+  else if (roll <= empty + badR) {
+    const j = bad[Math.floor(Math.random() * bad.length)];
+    text += `💀 ${j.name}\n기억하고 싶지 않은 맛이다.\n(${j.effect})`;
+  } 
+  else if (roll <= empty + badR + normalR) {
+    const j = normal[Math.floor(Math.random() * normal.length)];
+    text += `🍬 ${j.name}\n익숙한 맛이 입안을 감싼다.\n(${j.effect})`;
+  } 
+  else {
+    const j = good[Math.floor(Math.random() * good.length)];
+    text += `✨ ${j.name}\n기분 좋은 단맛이 퍼진다!\n(${j.effect})`;
+  }
+
+  document.getElementById("result").innerText = text;
+}
+</script>
+
+</body>
+</html>
