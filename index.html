@@ -45,7 +45,6 @@
   </p>
 
   <input type="text" id="name" placeholder="이름을 입력하세요">
-
   <input type="number" id="luck" placeholder="행운 수치 (1~5)" min="1" max="5">
 
   <button onclick="draw()">젤리 먹기</button>
@@ -54,6 +53,7 @@
 </div>
 
 <script>
+// 젤리 목록
 const bad = [
   {name:"코딱지", effect:"지능 -1"},
   {name:"지렁이", effect:"행운 -1"},
@@ -76,6 +76,7 @@ const good = [
   {name:"설탕 묻힌 과일", effect:"체력 +5"}
 ];
 
+// 행운 수치별 확률 [꽝, 나쁨, 보통, 좋음]
 const rates = {
   1: [40, 40, 20, 0],
   2: [30, 30, 35, 5],
@@ -84,6 +85,24 @@ const rates = {
   5: [0, 5, 60, 35]
 };
 
+// 카멜 교수 대사
+const camelDialogue = {
+  "바나나": "아, 바나나라서 다행이에요… 당분이 근육 반응을 도와주거든요.",
+  "청사과": "새콤한 과일은 운의 흐름을 정화해줘요.",
+  "마시멜로우": "식감은 없지만… 기억력엔 좋아요!",
+  "블루베리": "이 맛을 알아차렸다면 이미 지능이 올라간 거예요.",
+  "레몬사탕": "레몬은 행운에 좋아요. 너무 찡그리진 말고요.",
+  "시나몬": "시나몬은 힘을 끌어내지만… 무리는 금물이에요!",
+  "솜사탕": "이건 응급용 당분이에요! 몸이 바로 반응할 거예요.",
+  "설탕 묻힌 과일": "체력이 회복될 거예요. 아, 너무 많이 먹진 말고요!",
+  "수박": "수분과 반사 신경에 좋아요.",
+  "체리": "반응 속도가 조금 빨라질 거예요.",
+  "코딱지": "아… 이건 정말 죄송해요… 제가 미리 확인했어야 했는데…",
+  "지렁이": "오늘은… 운이 안 좋은 날 같네요. 무리하지 마세요.",
+  "귀지": "으읏… 근력 반응이 둔해질 수 있어요. 조심하세요."
+};
+
+// 뽑기 함수
 function draw() {
   const name = document.getElementById("name").value || "이름 없는 마법사";
   const luck = parseInt(document.getElementById("luck").value);
@@ -99,19 +118,19 @@ function draw() {
   let text = `${name}은(는) 젤리빈을 입에 넣었다...\n\n`;
 
   if (roll <= empty) {
-    text += "❌ 꽝!\n아무런 효과도 일어나지 않았다.";
+    text += "❌ 꽝!\n아무런 효과도 일어나지 않았다.\n\n🧙‍♀️ 카멜 교수:\n\"아… 아무 맛도 안 느껴지셨나요? 그럴 수도 있어요…\"";
   } 
   else if (roll <= empty + badR) {
     const j = bad[Math.floor(Math.random() * bad.length)];
-    text += `💀 ${j.name}\n기억하고 싶지 않은 맛이다.\n(${j.effect})`;
+    text += `💀 ${j.name}\n(${j.effect})\n\n🧙‍♀️ 카멜 교수:\n"${camelDialogue[j.name]}"`;
   } 
   else if (roll <= empty + badR + normalR) {
     const j = normal[Math.floor(Math.random() * normal.length)];
-    text += `🍬 ${j.name}\n익숙한 맛이 입안을 감싼다.\n(${j.effect})`;
+    text += `🍬 ${j.name}\n(${j.effect})\n\n🧙‍♀️ 카멜 교수:\n"${camelDialogue[j.name]}"`;
   } 
   else {
     const j = good[Math.floor(Math.random() * good.length)];
-    text += `✨ ${j.name}\n기분 좋은 단맛이 퍼진다!\n(${j.effect})`;
+    text += `✨ ${j.name}\n(${j.effect})\n\n🧙‍♀️ 카멜 교수:\n"${camelDialogue[j.name]}"`;
   }
 
   document.getElementById("result").innerText = text;
