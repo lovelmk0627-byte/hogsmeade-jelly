@@ -109,4 +109,41 @@ function draw() {
 
   if (luck < 1 || luck > 5 || isNaN(luck)) {
     document.getElementById("result").innerText =
-      "⚠️ 행운 수치는 1
+      "⚠️ 행운 수치는 1에서 5 사이로 입력해주세요.";
+    return;
+  }
+
+  const roll = Math.floor(Math.random() * 100) + 1;
+  const [empty, badR, normalR, goodR] = rates[luck];
+  let text = `${name}은(는) 젤리빈을 입에 넣었다...\n\n`;
+
+  let j = null;
+
+  if (roll <= empty) {
+    text += "❌ 꽝!\n아무런 효과도 일어나지 않았다.\n\n🧙‍♀️ 카멜 교수:\n\"아… 아무 맛도 안 느껴지셨나요? 그럴 수도 있어요…\"";
+    document.getElementById("result").innerText = text;
+    return;
+  } 
+  else if (roll <= empty + badR) {
+    j = bad[Math.floor(Math.random() * bad.length)];
+    text += `💀 ${j.name}\n(${j.effect})`;
+  } 
+  else if (roll <= empty + badR + normalR) {
+    j = normal[Math.floor(Math.random() * normal.length)];
+    text += `🍬 ${j.name}\n(${j.effect})`;
+  } 
+  else {
+    j = good[Math.floor(Math.random() * good.length)];
+    text += `✨ ${j.name}\n(${j.effect})`;
+  }
+
+  const camelLine = camelDialogue[j.name];
+
+  text += `\n\n🧙‍♀️ 카멜 교수:\n"${camelLine}"`;
+
+  document.getElementById("result").innerText = text;
+}
+</script>
+
+</body>
+</html>
